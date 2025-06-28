@@ -63,7 +63,7 @@ Untuk menjalankan proyek ini di komputer Anda, ikuti langkah-langkah berikut:
 
 1.  **Clone repositori ini:**
     ```bash
-    git clone [https://github.com/NAMA_ANDA/aplikasi-sikos.git](https://github.com/NAMA_ANDA/aplikasi-sikos.git)
+    git clone [https://github.com/faiz140405/aplikasi-sikos.git](https://github.com/faiz140405/aplikasi-sikos.git)
     ```
 
 2.  **Masuk ke direktori proyek:**
