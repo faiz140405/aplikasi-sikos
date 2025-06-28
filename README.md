@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/user-attachments/assets/5742a2e4-9407-4226-8840-0588647b3a1a" alt="Sikos Logo" width="150">
+  <img src="assets/logo-sikos.png" alt="Sikos Logo" width="150">
   <h1>Aplikasi Sikos - Manajemen Kos-Kosan</h1>
   <p>
     Aplikasi mobile untuk membantu pemilik kos mengelola properti secara efisien.
@@ -12,14 +12,6 @@
 </div>
 
 Aplikasi mobile berbasis React Native yang dirancang untuk membantu pemilik atau pengelola properti kos-kosan dalam mencatat dan mengelola data bisnis mereka secara efisien dan terorganisir. Proyek ini dibangun sebagai bagian dari tugas perkuliahan dan memanfaatkan database cloud real-time dari Google Firebase.
-
----
-
-## Tampilan Aplikasi
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/user-attachments/assets/6bc20e0d-7236-4d2c-80a2-2ab9dc153b92" alt="Tampilan Aplikasi Sikos" width="300">
-</div>
 
 ---
 
