@@ -3,14 +3,14 @@ import { View, Text, StyleSheet, ActivityIndicator, StatusBar } from 'react-nati
 
 const DataVerificationScreen = ({ navigation }) => {
   useEffect(() => {
-    // Simulasi proses verifikasi data
+    // Simulasi proses verifikasi data selama 2 detik
     setTimeout(() => {
-      // Ganti navigasi ke 'MainApp' (Tab Navigator) dan hapus semua riwayat navigasi sebelumnya
+      // Pindah ke 'MainApp' (halaman utama dengan tab) dan hapus semua riwayat navigasi sebelumnya
       navigation.reset({
         index: 0,
         routes: [{ name: 'MainApp' }],
       });
-    }, 2000); // Tampilkan selama 2 detik
+    }, 2000); 
   }, [navigation]);
 
   return (
@@ -22,6 +22,7 @@ const DataVerificationScreen = ({ navigation }) => {
   );
 };
 
+// StyleSheet dikembalikan untuk menggunakan Poppins
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 16,
     fontSize: 16,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-Regular', // Menggunakan font Poppins
     color: '#888888',
   },
 });

@@ -1,14 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { db } from '../firebaseConfig'; // Import firestore
-import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
+import { collection, addDoc, onSnapshot, query, where } from 'firebase/firestore';
+import RNPickerSelect from 'react-native-picker-select';
 
 const TambahPenyewaScreen = ({ navigation }) => {
     const [nama, setNama] = useState('');
-    const [kamar, setKamar] = useState('');
+    const [kamar, setKamar] = useState(null); // Diubah menjadi null untuk picker
     const [sisaHari, setSisaHari] = useState('');
     const [harga, setHarga] = useState('');
+
+    // State baru untuk menyimpan daftar kamar dari Firestore
+    const [daftarKamar, setDaftarKamar] = useState([]);
+    const [loadingKamar, setLoadingKamar] = useState(true);
+
+    // useEffect untuk mengambil daftar kamar yang statusnya "Kosong"
+    useEffect(() => {
+        const q = query(collection(db, "kamar"), where("status", "==", "Kosong"));
+        
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const listKamar = snapshot.docs.map(doc => ({
+                label: `Kamar ${doc.data().number}`,
+                value: doc.data().number,
+                id: doc.id // Menyimpan ID dokumen untuk update status nanti
+            }));
+            setDaftarKamar(listKamar);
+            setLoadingKamar(false);
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     const handleSimpan = async () => {
         if (!nama || !kamar || !sisaHari || !harga) {
@@ -19,16 +41,16 @@ const TambahPenyewaScreen = ({ navigation }) => {
         try {
             await addDoc(collection(db, "penyewa"), {
                 name: nama,
-                room: kamar,
+                room: kamar, // 'kamar' sekarang adalah nomor kamar dari picker
                 daysLeft: parseInt(sisaHari),
                 price: parseInt(harga),
-                status: 'aktif' // Default status saat menambah
+                status: 'aktif'
             });
             Alert.alert('Sukses', 'Data penyewa berhasil ditambahkan.');
             navigation.goBack();
         } catch (e) {
             console.error("Error adding document: ", e);
-            Alert.alert('Error', 'Gagal menambahkan data.');
+            Alert.alert('Error', 'Gagal menambahkan data penyewa.');
         }
     };
 
@@ -48,12 +70,19 @@ const TambahPenyewaScreen = ({ navigation }) => {
                     <TextInput style={styles.input} value={nama} onChangeText={setNama} placeholder="Masukkan nama penyewa" />
                 </View>
                  <View style={styles.formGroup}>
-                    <Text style={styles.label}>Nomor Kamar</Text>
-                    <TextInput style={styles.input} value={kamar} onChangeText={setKamar} keyboardType="numeric" placeholder="Contoh: 07" />
+                    <Text style={styles.label}>Pilih Kamar</Text>
+                    <RNPickerSelect
+                        onValueChange={(value) => setKamar(value)}
+                        items={daftarKamar}
+                        style={pickerSelectStyles}
+                        placeholder={{ label: loadingKamar ? 'Memuat kamar...' : '-- Pilih Kamar Kosong --', value: null }}
+                        disabled={loadingKamar}
+                        Icon={() => <MaterialCommunityIcons name="chevron-down" size={24} color="#888" />}
+                    />
                 </View>
                  <View style={styles.formGroup}>
                     <Text style={styles.label}>Sisa Hari Sewa</Text>
-                    <TextInput style={styles.input} value={sisaHari} onChangeText={setSisaHari} keyboardType="numeric" placeholder="Contoh: 300" />
+                    <TextInput style={styles.input} value={sisaHari} onChangeText={setSisaHari} keyboardType="numeric" placeholder="Contoh: 365" />
                 </View>
                  <View style={styles.formGroup}>
                     <Text style={styles.label}>Harga Sewa (Rp)</Text>
@@ -67,16 +96,25 @@ const TambahPenyewaScreen = ({ navigation }) => {
     );
 };
 
+// --- StyleSheet dikembalikan untuk menggunakan Poppins ---
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: '#30C95B' },
     container: { flex: 1, backgroundColor: '#f8f9fa', padding: 16 },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, backgroundColor: '#30C95B' },
-    headerTitle: { fontWeight: 'bold', fontSize: 18, color: '#fff' },
+    headerTitle: { fontFamily: 'Poppins-Bold', fontSize: 18, color: '#fff' },
     formGroup: { marginBottom: 16 },
-    label: { fontWeight: '600', fontSize: 14, color: '#333', marginBottom: 8 },
-    input: { backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0' },
+    label: { fontFamily: 'Poppins-SemiBold', fontSize: 14, color: '#333', marginBottom: 8 },
+    input: { backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, fontFamily: 'Poppins-Regular', fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0' },
     saveButton: { backgroundColor: '#28A745', paddingVertical: 15, borderRadius: 8, alignItems: 'center', marginTop: 20 },
-    saveButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' },
+    saveButtonText: { color: '#FFFFFF', fontSize: 16, fontFamily: 'Poppins-Bold' },
 });
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: { fontSize: 16, paddingVertical: 12, paddingHorizontal: 10, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50, fontFamily: 'Poppins-Regular' },
+  inputAndroid: { fontSize: 16, paddingHorizontal: 10, paddingVertical: 8, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50, fontFamily: 'Poppins-Regular' },
+  iconContainer: { top: 12, right: 15, },
+  placeholder: { color: '#CDCDCD' },
+});
+
 
 export default TambahPenyewaScreen;

@@ -4,9 +4,10 @@ import { View, Text, StyleSheet, ActivityIndicator, StatusBar } from 'react-nati
 const LoadingScreen = ({ navigation }) => {
   useEffect(() => {
     // Simulasi proses loading (misal: cek token, ambil data awal)
+    // Setelah 1.5 detik, pindah ke layar Login
     setTimeout(() => {
-      navigation.replace('Login'); // Pindah ke layar Login
-    }, 1500); // 1.5 detik
+      navigation.replace('Login'); 
+    }, 1500);
   }, [navigation]);
 
   return (
@@ -19,6 +20,7 @@ const LoadingScreen = ({ navigation }) => {
   );
 };
 
+// StyleSheet dikembalikan untuk menggunakan Poppins
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -29,6 +31,7 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 16,
     fontSize: 16,
+    fontFamily: 'Poppins-Regular', // Menggunakan font Poppins
     color: '#888888',
   },
 });

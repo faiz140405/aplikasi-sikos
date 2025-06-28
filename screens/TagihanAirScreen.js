@@ -1,27 +1,18 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, FlatList, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-// Data Dummy untuk daftar tagihan air
-const tagihanData = [
-    { id: '1', number: '12', amount: 10000, status: 'Belum Lunas', due: '-12 h' },
-    { id: '2', number: '10', amount: 10000, status: 'Lunas', due: '-12 h' },
-    { id: '3', number: '08', amount: 10000, status: 'Lunas', due: '-12 h' },
-    { id: '4', number: '24', amount: 10000, status: 'Belum Lunas', due: '-12 h' },
-    { id: '5', number: '09', amount: 10000, status: 'Belum Lunas', due: '-12 h' },
-    { id: '6', number: '11', amount: 10000, status: 'Lunas', due: '-12 h' },
-    { id: '7', number: '06', amount: 10000, status: 'Belum Lunas', due: '-12 h' },
-    { id: '8', number: '03', amount: 10000, status: 'Belum Lunas', due: '-12 h' },
-];
+import { db } from '../firebaseConfig';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 
 // Helper untuk format Rupiah
 const formatCurrency = (value) => `Rp.${new Intl.NumberFormat('id-ID').format(value)}`;
 
 // Komponen untuk setiap item tagihan
-const TagihanItem = ({ item }) => {
+const TagihanItem = ({ item, onPress }) => {
     const isLunas = item.status === 'Lunas';
     return (
-        <TouchableOpacity style={styles.card}>
+        // Dibungkus TouchableOpacity agar bisa diklik
+        <TouchableOpacity style={styles.card} onPress={onPress}>
             <View style={styles.iconContainer}>
                 <MaterialCommunityIcons name="water" size={28} color="#fff" />
             </View>
@@ -32,13 +23,32 @@ const TagihanItem = ({ item }) => {
                    <Text style={[styles.statusText, { color: isLunas ? '#28A745' : '#FBC02D' }]}>{item.status}</Text>
                 </View>
             </View>
-            <Text style={styles.time}>{item.due}</Text>
+            {/* Tampilan waktu bisa ditambahkan lagi nanti */}
+            {/* <Text style={styles.time}>{item.due}</Text> */}
         </TouchableOpacity>
     );
 };
 
 // Komponen Utama Layar Tagihan Air
 const TagihanAirScreen = ({ navigation }) => {
+    const [tagihanList, setTagihanList] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Mengambil data dari koleksi 'tagihan_air' di Firestore
+        const q = query(collection(db, "tagihan_air"), orderBy("createdAt", "desc"));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setTagihanList(list);
+            setLoading(false);
+        });
+        return () => unsubscribe(); // Cleanup listener
+    }, []);
+
+    if (loading) {
+        return <View style={styles.loadingContainer}><ActivityIndicator size="large" color="#30C95B" /></View>;
+    }
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.header}>
@@ -64,37 +74,44 @@ const TagihanAirScreen = ({ navigation }) => {
                 </View>
 
                 <FlatList
-                    data={tagihanData}
-                    renderItem={({ item }) => <TagihanItem item={item} />}
+                    data={tagihanList}
+                    renderItem={({ item }) => <TagihanItem item={item} onPress={() => navigation.navigate('DetailTagihan', { tagihanId: item.id, type: 'air' })} />}
                     keyExtractor={item => item.id}
                     showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={<Text style={styles.emptyText}>Belum ada tagihan air.</Text>}
                 />
             </View>
+            {/* Tombol Tambah (FAB) */}
+            <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('TambahTagihan', { type: 'air' })}>
+                <MaterialCommunityIcons name="plus" size={32} color="#fff" />
+            </TouchableOpacity>
         </SafeAreaView>
     );
 };
 
-// --- StyleSheet ---
+// --- StyleSheet dikembalikan untuk menggunakan Poppins ---
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: '#30C95B' },
-    container: { flex: 1, backgroundColor: '#f8f9fa', paddingHorizontal: 16 },
+    container: { flex: 1, backgroundColor: '#f8f9fa' },
+    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, backgroundColor: '#30C95B' },
-    headerTitle: { fontWeight: 'bold', fontSize: 18, color: '#fff' },
-    searchContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 8, paddingHorizontal: 12, marginTop: 16, borderWidth: 1, borderColor: '#E0E0E0' },
+    headerTitle: { fontFamily: 'Poppins-Bold', fontSize: 18, color: '#fff' },
+    searchContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 8, paddingHorizontal: 12, marginVertical: 16, marginHorizontal: 16, borderWidth: 1, borderColor: '#E0E0E0' },
     searchIcon: { marginRight: 8 },
-    searchInput: { flex: 1, height: 48, fontSize: 16 },
-    listHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 20 },
-    listTitle: { fontWeight: 'bold', fontSize: 18, color: '#333' },
+    searchInput: { flex: 1, height: 48, fontFamily: 'Poppins-Regular', fontSize: 16 },
+    listHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, paddingHorizontal: 16 },
+    listTitle: { fontFamily: 'Poppins-Bold', fontSize: 18, color: '#333' },
     headerIcons: { flexDirection: 'row' },
-    card: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, padding: 16, marginBottom: 12, elevation: 2, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 5 },
+    card: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, padding: 16, marginBottom: 12, marginHorizontal: 16, elevation: 2, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 5 },
     iconContainer: { width: 50, height: 50, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginRight: 16, backgroundColor: '#4596F7' },
     textContainer: { flex: 1 },
-    title: { fontWeight: '600', fontSize: 16, color: '#333' },
-    amount: { fontSize: 14, color: '#888', marginVertical: 2 },
+    title: { fontFamily: 'Poppins-SemiBold', fontSize: 16, color: '#333' },
+    amount: { fontFamily: 'Poppins-Regular', fontSize: 14, color: '#888', marginVertical: 2 },
     statusBadge: { alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, marginTop: 4 },
-    statusText: { fontWeight: '500', fontSize: 12, textTransform: 'uppercase' },
-    time: { fontWeight: '600', fontSize: 14, color: '#888' },
+    statusText: { fontFamily: 'Poppins-Medium', fontSize: 12, textTransform: 'uppercase' },
+    time: { fontFamily: 'Poppins-SemiBold', fontSize: 14, color: '#888' },
+    fab: { position: 'absolute', right: 20, bottom: 20, width: 60, height: 60, borderRadius: 30, backgroundColor: '#30C95B', justifyContent: 'center', alignItems: 'center', elevation: 8 },
+    emptyText: { textAlign: 'center', marginTop: 50, fontFamily: 'Poppins-Regular', color: '#888' }
 });
-
 
 export default TagihanAirScreen;

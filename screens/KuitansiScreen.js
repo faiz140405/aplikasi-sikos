@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 const kosIcon = require('../assets/icon-kos.png'); // Pastikan Anda sudah punya aset ini
 
 const KuitansiScreen = ({ navigation, route }) => {
+    // Mengambil data transaksi yang dikirim dari layar TambahTransaksi
     const { transaction } = route.params;
 
     const handleShare = async () => {
@@ -18,14 +19,17 @@ Tanggal: ${transaction.tanggal}
 Penyewa: ${transaction.penyewa} (${transaction.kamar})
 --------------------
 Terima kasih!
-            `;
-            await Share.share({ message });
+Dihasilkan oleh aplikasi SIKOS.`;
+            await Share.share({
+                message,
+            });
         } catch (error) {
             alert(error.message);
         }
     };
 
     const handleHalamanUtama = () => {
+        // Kembali ke halaman utama dengan mereset tumpukan navigasi
         navigation.reset({
             index: 0,
             routes: [{ name: 'MainApp' }],
@@ -101,29 +105,29 @@ Terima kasih!
     );
 };
 
-// Styles...
+// StyleSheet dikembalikan untuk menggunakan Poppins
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: '#f8f9fa' },
     container: { flex: 1, padding: 16, justifyContent: 'space-between' },
     header: { padding: 16, backgroundColor: '#f8f9fa', alignItems: 'center' },
-    headerTitle: { fontWeight: 'bold', fontSize: 18, color: '#333' },
+    headerTitle: { fontFamily: 'Poppins-Bold', fontSize: 18, color: '#333' },
     card: { backgroundColor: '#30C95B', borderRadius: 16, padding: 20 },
     cardHeader: { flexDirection: 'row', alignItems: 'center' },
     kosIcon: { width: 50, height: 50, marginRight: 16 },
-    kosName: { fontWeight: 'bold', fontSize: 16, color: '#fff' },
-    kosAddress: { fontSize: 12, color: '#fff', flexShrink: 1 },
+    kosName: { fontFamily: 'Poppins-Bold', fontSize: 16, color: '#fff' },
+    kosAddress: { fontFamily: 'Poppins-Regular', fontSize: 12, color: '#fff', flexShrink: 1 },
     separator: { height: 1.5, backgroundColor: 'rgba(255,255,255,0.3)', marginVertical: 16 },
-    totalLabel: { color: '#fff', textAlign: 'center', fontSize: 14 },
-    totalAmount: { fontWeight: 'bold', color: '#fff', textAlign: 'center', fontSize: 28, marginTop: 4 },
+    totalLabel: { fontFamily: 'Poppins-Regular', color: '#fff', textAlign: 'center', fontSize: 14 },
+    totalAmount: { fontFamily: 'Poppins-Bold', color: '#fff', textAlign: 'center', fontSize: 28, marginTop: 4 },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
-    detailLabel: { fontSize: 14, color: '#E0F2E9' },
-    detailValue: { fontWeight: '600', fontSize: 14, color: '#fff' },
-    footerText: { fontWeight: '600', color: '#fff', textAlign: 'center' },
-    footerSubText: { fontSize: 12, color: '#E0F2E9', textAlign: 'center', marginTop: 4 },
-    shareButton: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderWidth: 2, borderColor: '#30C95B', borderRadius: 8, paddingVertical: 14, marginTop: 24 },
-    shareButtonText: { color: '#30C95B', fontWeight: 'bold', fontSize: 16, marginRight: 8 },
+    detailLabel: { fontFamily: 'Poppins-Regular', fontSize: 14, color: '#E0F2E9' },
+    detailValue: { fontFamily: 'Poppins-SemiBold', fontSize: 14, color: '#fff' },
+    footerText: { fontFamily: 'Poppins-SemiBold', color: '#fff', textAlign: 'center' },
+    footerSubText: { fontFamily: 'Poppins-Regular', fontSize: 12, color: '#E0F2E9', textAlign: 'center', marginTop: 4 },
+    shareButton: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderWidth: 2, borderColor: '#30C95B', borderRadius: 8, paddingVertical: 14, marginTop: 300 },
+    shareButtonText: { color: '#30C95B', fontFamily: 'Poppins-Bold', fontSize: 16, marginRight: 8 },
     homeButton: { backgroundColor: '#30C95B', borderRadius: 8, paddingVertical: 15, alignItems: 'center', marginTop: 12 },
-    homeButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 }
+    homeButtonText: { color: '#fff', fontFamily: 'Poppins-Bold', fontSize: 16 }
 });
 
 

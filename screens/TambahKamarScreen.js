@@ -85,23 +85,24 @@ const TambahKamarScreen = ({ navigation }) => {
     );
 };
 
-// Styles
+// --- StyleSheet dikembalikan untuk menggunakan Poppins ---
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: '#30C95B' },
     container: { flex: 1, backgroundColor: '#f8f9fa', padding: 16 },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, backgroundColor: '#30C95B' },
-    headerTitle: { fontWeight: 'bold', fontSize: 18, color: '#fff' },
+    headerTitle: { fontFamily: 'Poppins-Bold', fontSize: 18, color: '#fff' },
     formGroup: { marginBottom: 16 },
-    label: { fontWeight: '600', fontSize: 14, color: '#333', marginBottom: 8 },
-    input: { backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0' },
+    label: { fontFamily: 'Poppins-SemiBold', fontSize: 14, color: '#333', marginBottom: 8 },
+    input: { backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, fontFamily: 'Poppins-Regular', fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0' },
     saveButton: { backgroundColor: '#28A745', paddingVertical: 15, borderRadius: 8, alignItems: 'center', marginTop: 20 },
-    saveButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' },
+    saveButtonText: { color: '#FFFFFF', fontSize: 16, fontFamily: 'Poppins-Bold' },
 });
 
 const pickerSelectStyles = StyleSheet.create({
-  inputIOS: { fontSize: 16, paddingVertical: 12, paddingHorizontal: 10, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50 },
-  inputAndroid: { fontSize: 16, paddingHorizontal: 10, paddingVertical: 8, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50 },
+  inputIOS: { fontSize: 16, paddingVertical: 12, paddingHorizontal: 10, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50, fontFamily: 'Poppins-Regular' },
+  inputAndroid: { fontSize: 16, paddingHorizontal: 10, paddingVertical: 8, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50, fontFamily: 'Poppins-Regular' },
   iconContainer: { top: 12, right: 15, },
+  placeholder: { color: '#CDCDCD' },
 });
 
 

@@ -75,20 +75,84 @@ const NotifikasiScreen = ({ navigation }) => {
 
 // --- StyleSheet ---
 const styles = StyleSheet.create({
-    safeArea: { flex: 1, backgroundColor: '#30C95B', },
-    container: { flex: 1, backgroundColor: '#f8f9fa', },
-    header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, backgroundColor: '#30C95B', },
-    headerTitle: { fontWeight: 'bold', fontSize: 18, color: '#fff', },
-    listContainer: { backgroundColor: '#f8f9fa', paddingHorizontal: 16, paddingTop: 16, },
-    card: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, padding: 16, marginBottom: 12, elevation: 2, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 5, },
-    iconContainer: { width: 50, height: 50, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginRight: 16, },
-    textContainer: { flex: 1, },
-    title: { fontWeight: '600', fontSize: 16, color: '#333', },
-    subtitleContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 4, },
-    subtitle: { fontSize: 14, color: '#888', },
-    statusBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6, marginLeft: 8, },
-    statusText: { fontWeight: '500', fontSize: 12, },
-    time: { fontWeight: '600', fontSize: 14, color: '#888', },
+    safeArea: {
+        flex: 1,
+        backgroundColor: '#30C95B',
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#f8f9fa',
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 16,
+        backgroundColor: '#30C95B',
+    },
+    headerTitle: {
+        fontFamily: 'Poppins-Bold',
+        fontSize: 18,
+        color: '#fff',
+    },
+    listContainer: {
+        backgroundColor: '#f8f9fa',
+        paddingHorizontal: 16,
+        paddingTop: 16,
+    },
+    card: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 16,
+        marginBottom: 12,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
+        shadowRadius: 5,
+    },
+    iconContainer: {
+        width: 50,
+        height: 50,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 16,
+    },
+    textContainer: {
+        flex: 1,
+    },
+    title: {
+        fontFamily: 'Poppins-SemiBold',
+        fontSize: 16,
+        color: '#333',
+    },
+    subtitleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 4,
+    },
+    subtitle: {
+        fontFamily: 'Poppins-Regular',
+        fontSize: 14,
+        color: '#888',
+    },
+    statusBadge: {
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        borderRadius: 6,
+        marginLeft: 8,
+    },
+    statusText: {
+        fontFamily: 'Poppins-Medium',
+        fontSize: 12,
+    },
+    time: {
+        fontFamily: 'Poppins-SemiBold',
+        fontSize: 14,
+        color: '#888',
+    },
 });
 
 export default NotifikasiScreen;

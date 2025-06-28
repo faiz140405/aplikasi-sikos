@@ -47,21 +47,20 @@ const TambahTransaksiScreen = ({ navigation, route }) => {
             date: tanggal,
             room: kamar || 'Umum', // Jika kamar tidak dipilih, anggap umum
             description: deskripsi,
-            createdAt: serverTimestamp() // Menambah stempel waktu server
+            createdAt: serverTimestamp()
         };
 
         try {
             await addDoc(collection(db, collectionName), transactionData);
             Alert.alert('Sukses', `Data ${collectionName} berhasil ditambahkan.`);
             
-            // Siapkan data untuk kuitansi
             const receiptData = {
                 noRef: Math.floor(100000000 + Math.random() * 900000000),
                 jenisTransaksi: kategori,
                 kamar: kamar ? `Kamar ${kamar}` : 'Umum',
-                penyewa: 'Faiz Nizar Nu\'aim', // Ini bisa di-hardcode atau diambil dari data lain
+                penyewa: 'Faiz Nizar Nu\'aim',
                 tanggal: tanggal.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
-                tagihanSelanjutnya: '-', // Anda bisa sesuaikan ini nanti
+                tagihanSelanjutnya: '-',
                 totalTransaksi: numericJumlah,
             };
 
@@ -118,28 +117,28 @@ const TambahTransaksiScreen = ({ navigation, route }) => {
     );
 };
 
-// Styles...
+// --- StyleSheet dikembalikan untuk menggunakan Poppins ---
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: '#30C95B' },
     container: { flex: 1, backgroundColor: '#f8f9fa', padding: 16 },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, backgroundColor: '#30C95B' },
-    headerTitle: { fontWeight: 'bold', fontSize: 18, color: '#fff' },
+    headerTitle: { fontFamily: 'Poppins-Bold', fontSize: 18, color: '#fff' },
     formGroup: { marginBottom: 16 },
-    label: { fontWeight: '600', fontSize: 14, color: '#333', marginBottom: 8 },
-    input: { backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0' },
+    label: { fontFamily: 'Poppins-SemiBold', fontSize: 14, color: '#333', marginBottom: 8 },
+    input: { backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, fontFamily: 'Poppins-Regular', fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0' },
     dateInput: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, borderWidth: 1, borderColor: '#E0E0E0' },
-    dateText: { fontSize: 16 },
-    textArea: { backgroundColor: '#fff', height: 100, borderRadius: 8, paddingHorizontal: 16, paddingVertical: 12, fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0', textAlignVertical: 'top' },
+    dateText: { fontFamily: 'Poppins-Regular', fontSize: 16 },
+    textArea: { backgroundColor: '#fff', height: 100, borderRadius: 8, paddingHorizontal: 16, paddingVertical: 12, fontFamily: 'Poppins-Regular', fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0', textAlignVertical: 'top' },
     saveButton: { flex: 1, backgroundColor: '#28A745', paddingVertical: 15, borderRadius: 8, alignItems: 'center' },
-    saveButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' },
+    saveButtonText: { color: '#FFFFFF', fontSize: 16, fontFamily: 'Poppins-Bold' },
     shareButton: { marginLeft: 16, borderWidth: 1, borderColor: '#30C95B', width: 50, height: 50, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }
 });
 
 const pickerSelectStyles = StyleSheet.create({
-  inputIOS: { fontSize: 16, paddingVertical: 12, paddingHorizontal: 10, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50 },
-  inputAndroid: { fontSize: 16, paddingHorizontal: 10, paddingVertical: 8, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50 },
+  inputIOS: { fontSize: 16, paddingVertical: 12, paddingHorizontal: 10, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50, fontFamily: 'Poppins-Regular' },
+  inputAndroid: { fontSize: 16, paddingHorizontal: 10, paddingVertical: 8, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50, fontFamily: 'Poppins-Regular' },
   iconContainer: { top: 12, right: 15, },
+  placeholder: { color: '#CDCDCD' },
 });
-
 
 export default TambahTransaksiScreen;

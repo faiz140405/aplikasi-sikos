@@ -15,14 +15,19 @@ const unformatCurrency = (value) => value.toString().replace(/\D/g, '');
 
 
 const DetailTransaksiScreen = ({ route, navigation }) => {
-    const { transaksiId, tipe } = route.params; // tipe: 'pemasukan' or 'pengeluaran'
+    // Mengambil ID transaksi dan tipe (pemasukan/pengeluaran) dari parameter
+    const { transaksiId, tipe } = route.params;
     const [loading, setLoading] = useState(true);
 
+    // State untuk menyimpan data asli dari Firestore
     const [transaksi, setTransaksi] = useState(null);
+
+    // State untuk nilai-nilai di dalam form input
     const [kategori, setKategori] = useState('');
     const [jumlah, setJumlah] = useState('');
     const [deskripsi, setDeskripsi] = useState('');
 
+    // Fungsi untuk mengambil data transaksi dari Firestore saat layar dimuat
     useEffect(() => {
         const fetchTransaksi = async () => {
             const docRef = doc(db, tipe, transaksiId);
@@ -31,6 +36,7 @@ const DetailTransaksiScreen = ({ route, navigation }) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 setTransaksi(data);
+                // Mengisi form dengan data yang ada
                 setKategori(data.category);
                 setJumlah(formatCurrency(data.amount));
                 setDeskripsi(data.description || '');
@@ -43,6 +49,7 @@ const DetailTransaksiScreen = ({ route, navigation }) => {
         fetchTransaksi();
     }, [transaksiId, tipe]);
 
+    // Fungsi untuk memperbarui data di Firestore
     const handleUpdate = async () => {
         const numericJumlah = parseInt(unformatCurrency(jumlah), 10);
         if (!kategori || !numericJumlah) {
@@ -63,6 +70,7 @@ const DetailTransaksiScreen = ({ route, navigation }) => {
         }
     };
     
+    // Fungsi untuk menghapus data dari Firestore
     const handleDelete = () => {
         Alert.alert(
             "Hapus Transaksi",
@@ -77,6 +85,7 @@ const DetailTransaksiScreen = ({ route, navigation }) => {
         );
     };
 
+    // Tampilkan loading indicator jika data belum siap
     if (loading || !transaksi) {
         return <View style={styles.loadingContainer}><ActivityIndicator size="large" color="#30C95B" /></View>
     }
@@ -109,18 +118,19 @@ const DetailTransaksiScreen = ({ route, navigation }) => {
     );
 };
 
+// StyleSheet dikembalikan untuk menggunakan Poppins
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: '#30C95B' },
     container: { flex: 1, backgroundColor: '#f8f9fa', padding: 16 },
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f8f9fa' },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, backgroundColor: '#30C95B' },
-    headerTitle: { fontWeight: 'bold', fontSize: 18, color: '#fff' },
+    headerTitle: { fontFamily: 'Poppins-Bold', fontSize: 18, color: '#fff' },
     formGroup: { marginBottom: 16 },
-    label: { fontWeight: '600', fontSize: 14, color: '#333', marginBottom: 8 },
-    input: { backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0' },
-    textArea: { backgroundColor: '#fff', height: 100, borderRadius: 8, paddingHorizontal: 16, paddingVertical: 12, fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0', textAlignVertical: 'top' },
+    label: { fontFamily: 'Poppins-SemiBold', fontSize: 14, color: '#333', marginBottom: 8 },
+    input: { backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, fontFamily: 'Poppins-Regular', fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0' },
+    textArea: { backgroundColor: '#fff', height: 100, borderRadius: 8, paddingHorizontal: 16, paddingVertical: 12, fontFamily: 'Poppins-Regular', fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0', textAlignVertical: 'top' },
     saveButton: { backgroundColor: '#28A745', paddingVertical: 15, borderRadius: 8, alignItems: 'center', marginTop: 20 },
-    saveButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' },
+    saveButtonText: { color: '#FFFFFF', fontSize: 16, fontFamily: 'Poppins-Bold' },
 });
 
 export default DetailTransaksiScreen;

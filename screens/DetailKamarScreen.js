@@ -6,18 +6,20 @@ import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import RNPickerSelect from 'react-native-picker-select';
 
 const DetailKamarScreen = ({ route, navigation }) => {
+    // Mengambil ID kamar dari parameter navigasi
     const { kamarId } = route.params;
     const [loading, setLoading] = useState(true);
 
-    // State untuk menyimpan data asli
+    // State untuk menyimpan data asli dari Firestore
     const [kamar, setKamar] = useState(null);
 
-    // State untuk input form
+    // State untuk nilai-nilai di dalam form input
     const [nomorKamar, setNomorKamar] = useState('');
     const [kategori, setKategori] = useState('');
     const [jangkaWaktu, setJangkaWaktu] = useState('');
     const [status, setStatus] = useState('');
 
+    // Fungsi untuk mengambil data kamar dari Firestore saat layar pertama kali dimuat
     useEffect(() => {
         const fetchKamar = async () => {
             const docRef = doc(db, "kamar", kamarId);
@@ -26,6 +28,7 @@ const DetailKamarScreen = ({ route, navigation }) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 setKamar(data);
+                // Mengisi form dengan data yang ada
                 setNomorKamar(data.number);
                 setKategori(data.category);
                 setJangkaWaktu(data.term);
@@ -39,6 +42,7 @@ const DetailKamarScreen = ({ route, navigation }) => {
         fetchKamar();
     }, [kamarId]);
 
+    // Fungsi untuk memperbarui data di Firestore
     const handleUpdate = async () => {
         if (!nomorKamar || !kategori || !jangkaWaktu) {
             Alert.alert('Error', 'Semua kolom harus diisi.');
@@ -59,6 +63,7 @@ const DetailKamarScreen = ({ route, navigation }) => {
         }
     };
     
+    // Fungsi untuk menghapus data dari Firestore
     const handleDelete = () => {
         Alert.alert(
             "Hapus Kamar",
@@ -73,7 +78,8 @@ const DetailKamarScreen = ({ route, navigation }) => {
         );
     };
 
-    if (loading) {
+    // Tampilkan loading indicator jika data belum siap
+    if (loading || !kamar) {
         return <View style={styles.loadingContainer}><ActivityIndicator size="large" color="#30C95B" /></View>
     }
 
@@ -127,17 +133,18 @@ const DetailKamarScreen = ({ route, navigation }) => {
     );
 };
 
+// StyleSheet dikembalikan untuk menggunakan Poppins
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: '#30C95B' },
     container: { flex: 1, backgroundColor: '#f8f9fa', padding: 16 },
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f8f9fa' },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, backgroundColor: '#30C95B' },
-    headerTitle: { fontWeight: 'bold', fontSize: 18, color: '#fff' },
+    headerTitle: { fontFamily: 'Poppins-Bold', fontSize: 18, color: '#fff' },
     formGroup: { marginBottom: 16 },
-    label: { fontWeight: '600', fontSize: 14, color: '#333', marginBottom: 8 },
-    input: { backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0' },
+    label: { fontFamily: 'Poppins-SemiBold', fontSize: 14, color: '#333', marginBottom: 8 },
+    input: { backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, fontFamily: 'Poppins-Regular', fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0' },
     saveButton: { backgroundColor: '#28A745', paddingVertical: 15, borderRadius: 8, alignItems: 'center', marginTop: 20 },
-    saveButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' },
+    saveButtonText: { color: '#FFFFFF', fontSize: 16, fontFamily: 'Poppins-Bold' },
 });
 
 const pickerSelectStyles = StyleSheet.create({
