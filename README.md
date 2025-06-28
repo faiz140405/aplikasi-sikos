@@ -91,4 +91,4 @@ Untuk menjalankan proyek ini di komputer Anda, ikuti langkah-langkah berikut:
 
 ## Penulis
 
-Dibuat oleh **[Faiz Nizar Nu'aim]** sebagai Proyek Kuliah.
+Dibuat oleh **[Faiz Nizar Nu'aim]**
