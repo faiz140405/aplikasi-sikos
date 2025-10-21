@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { ThemeProvider } from './ThemeContext';
 
 // Mengembalikan import untuk font dan splash screen
 import { useFonts } from 'expo-font';
@@ -104,5 +105,6 @@ const styles = StyleSheet.create({
         flex: 1,
     }
 });
+
 
 export default App;

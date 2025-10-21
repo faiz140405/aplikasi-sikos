@@ -7,14 +7,14 @@ import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestor
 // --- Aset Gambar ---
 const avatar = require('../assets/avatar-placeholder.png');
 const promoIllustration = require('../assets/illustration-promo.png'); 
-const promoIllustration2 = require('../assets/illustration-data-diri.png');
-const promoIllustration3 = require('../assets/illustration-otp.png');
+const promoIllustration2 = require('../assets/illustration-promo2.png');
+const promoIllustration3 = require('../assets/illustration-promo3.png');
 
 // --- Data untuk Carousel ---
 const carouselData = [
     { id: '1', title: 'Kelola kosan anda menjadi lebih mudah?', subtitle: 'Fitur canggih Sikos akan membantu mengelola kost anda.', image: promoIllustration },
-    { id: '2', title: 'Lengkapi Data Diri Anda!', subtitle: 'Pastikan semua data penyewa dan kamar sudah terisi lengkap.', image: promoIllustration2 },
-    { id: '3', title: 'Keamanan Terjamin', subtitle: 'Sistem kami menjaga data Anda tetap aman dan terlindungi.', image: promoIllustration3 },
+    { id: '2', title: 'Biar sikos aja lah yang atur aku mah santai!', subtitle: 'Serba mudah pakai teknologi dari aplikasi SIKOS ya kawan.', image: promoIllustration2 },
+    { id: '3', title: 'Cape di tagih sama Ibu Kos terus?', subtitle: 'Makannya pakai aplikasi SIKOS sekarang juga pasti mudah dan efektif.', image: promoIllustration3 },
 ];
 
 // --- Komponen untuk satu slide di carousel ---

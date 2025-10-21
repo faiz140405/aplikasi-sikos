@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, Scro
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
-import { db } from '../firebaseConfig';
+// PERBAIKAN: Memastikan path import sudah benar
+import { db } from '../firebaseConfig'; 
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 // Helper untuk format Rupiah
@@ -45,7 +46,7 @@ const TambahTransaksiScreen = ({ navigation, route }) => {
             category: kategori,
             amount: numericJumlah,
             date: tanggal,
-            room: kamar || 'Umum', // Jika kamar tidak dipilih, anggap umum
+            room: kamar || 'Umum',
             description: deskripsi,
             createdAt: serverTimestamp()
         };
@@ -63,7 +64,6 @@ const TambahTransaksiScreen = ({ navigation, route }) => {
                 tagihanSelanjutnya: '-',
                 totalTransaksi: numericJumlah,
             };
-
             navigation.replace('Kuitansi', { transaction: receiptData });
 
         } catch (e) {
@@ -117,7 +117,7 @@ const TambahTransaksiScreen = ({ navigation, route }) => {
     );
 };
 
-// --- StyleSheet dikembalikan untuk menggunakan Poppins ---
+// Styles
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: '#30C95B' },
     container: { flex: 1, backgroundColor: '#f8f9fa', padding: 16 },
@@ -140,5 +140,6 @@ const pickerSelectStyles = StyleSheet.create({
   iconContainer: { top: 12, right: 15, },
   placeholder: { color: '#CDCDCD' },
 });
+
 
 export default TambahTransaksiScreen;

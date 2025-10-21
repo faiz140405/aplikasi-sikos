@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, Scro
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { db } from '../firebaseConfig';
 import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import RNPickerSelect from 'react-native-picker-select';
 
 const DetailPenyewaScreen = ({ route, navigation }) => {
     // Mengambil ID penyewa dari parameter navigasi
@@ -17,6 +18,7 @@ const DetailPenyewaScreen = ({ route, navigation }) => {
     const [kamar, setKamar] = useState('');
     const [sisaHari, setSisaHari] = useState('');
     const [harga, setHarga] = useState('');
+    const [status, setStatus] = useState('aktif'); // State baru untuk status
 
     // Fungsi untuk mengambil data penyewa dari Firestore saat layar pertama kali dimuat
     useEffect(() => {
@@ -32,6 +34,7 @@ const DetailPenyewaScreen = ({ route, navigation }) => {
                 setKamar(data.room);
                 setSisaHari(data.daysLeft.toString());
                 setHarga(data.price.toString());
+                setStatus(data.status); // Mengisi state status
             } else {
                 Alert.alert("Error", "Data penyewa tidak ditemukan.");
                 navigation.goBack();
@@ -43,8 +46,8 @@ const DetailPenyewaScreen = ({ route, navigation }) => {
 
     // Fungsi untuk memperbarui data di Firestore
     const handleUpdate = async () => {
-        if (!nama || !kamar || !sisaHari || !harga) {
-            Alert.alert('Error', 'Semua kolom harus diisi.');
+        if (!nama || !kamar) {
+            Alert.alert('Error', 'Nama dan Kamar harus diisi.');
             return;
         }
         const docRef = doc(db, "penyewa", penyewaId);
@@ -52,8 +55,9 @@ const DetailPenyewaScreen = ({ route, navigation }) => {
             await updateDoc(docRef, {
                 name: nama,
                 room: kamar,
-                daysLeft: parseInt(sisaHari),
-                price: parseInt(harga)
+                daysLeft: parseInt(sisaHari) || 0,
+                price: parseInt(harga) || 0,
+                status: status // Menyimpan perubahan status
             });
             Alert.alert('Sukses', 'Data penyewa berhasil diperbarui');
             navigation.goBack();
@@ -78,7 +82,6 @@ const DetailPenyewaScreen = ({ route, navigation }) => {
         );
     };
 
-    // Tampilkan loading indicator jika data belum siap
     if (loading || !penyewa) {
         return <View style={styles.loadingContainer}><ActivityIndicator size="large" color="#30C95B" /></View>
     }
@@ -107,6 +110,21 @@ const DetailPenyewaScreen = ({ route, navigation }) => {
                     <Text style={styles.label}>Harga Sewa (Rp)</Text>
                     <TextInput style={styles.input} value={harga} onChangeText={setHarga} keyboardType="numeric" />
                 </View>
+                 {/* Dropdown untuk mengubah status */}
+                <View style={styles.formGroup}>
+                    <Text style={styles.label}>Status Penyewa</Text>
+                    <RNPickerSelect
+                        value={status}
+                        onValueChange={(value) => setStatus(value)}
+                        items={[
+                            { label: 'Aktif', value: 'aktif' },
+                            { label: 'Keluar', value: 'keluar' },
+                            // Anda bisa menambahkan status lain di sini, misal: 'tidak aktif'
+                        ]}
+                        style={pickerSelectStyles}
+                        Icon={() => <MaterialCommunityIcons name="chevron-down" size={24} color="#888" />}
+                    />
+                </View>
                 <TouchableOpacity style={styles.saveButton} onPress={handleUpdate}>
                     <Text style={styles.saveButtonText}>Simpan Perubahan</Text>
                 </TouchableOpacity>
@@ -127,6 +145,13 @@ const styles = StyleSheet.create({
     input: { backgroundColor: '#fff', height: 50, borderRadius: 8, paddingHorizontal: 16, fontFamily: 'Poppins-Regular', fontSize: 16, borderWidth: 1, borderColor: '#E0E0E0' },
     saveButton: { backgroundColor: '#28A745', paddingVertical: 15, borderRadius: 8, alignItems: 'center', marginTop: 20 },
     saveButtonText: { color: '#FFFFFF', fontSize: 16, fontFamily: 'Poppins-Bold' },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: { fontSize: 16, paddingVertical: 12, paddingHorizontal: 10, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50, fontFamily: 'Poppins-Regular' },
+  inputAndroid: { fontSize: 16, paddingHorizontal: 10, paddingVertical: 8, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, color: 'black', paddingRight: 30, backgroundColor: '#fff', height: 50, fontFamily: 'Poppins-Regular' },
+  iconContainer: { top: 12, right: 15, },
+  placeholder: { color: '#CDCDCD' },
 });
 
 export default DetailPenyewaScreen;

@@ -21,6 +21,20 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate('OTP', { phoneNumber: phoneNumber });
   };
 
+  // Konten untuk halaman Syarat & Ketentuan
+  const ketentuanContent = `Selamat datang di Sikos!
+
+Terima kasih telah menggunakan aplikasi kami untuk membantu mengelola usaha kos-kosan Anda. Dengan mengunduh, mendaftar, atau menggunakan aplikasi Sikos ("Layanan"), Anda setuju untuk terikat oleh Ketentuan Layanan dan Kebijakan Privasi di bawah ini. Harap baca dokumen ini dengan saksama.
+
+I. Ketentuan Penggunaan (Terms of Use)
+1. Penerimaan Ketentuan
+Dengan mengakses atau menggunakan Layanan kami, Anda mengonfirmasi bahwa Anda telah membaca, memahami, dan setuju untuk terikat oleh ketentuan ini. Jika Anda tidak setuju, Anda tidak diizinkan untuk menggunakan Layanan.
+
+IV. Informasi Kontak
+Jika Anda memiliki pertanyaan mengenai Ketentuan Layanan atau Kebijakan Privasi ini, silakan hubungi kami di:
+Email: sikos@gmail.com
+WhatsApp: +62-818-0988-4140`;
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#5DDE7C" />
@@ -34,7 +48,6 @@ const LoginScreen = ({ navigation }) => {
           Masukkan nomor ponsel atau memulai layanan dan verifikasi OTP akan dikirim ke ponselmu
         </Text>
 
-        {/* PERUBAHAN: Container input nomor telepon */}
         <View style={styles.phoneInputContainer}>
           <View style={styles.countryCodeContainer}>
             <Text style={styles.countryCodeText}>+62</Text>
@@ -53,7 +66,10 @@ const LoginScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Verifikasi nomor telepon</Text>
         </TouchableOpacity>
         
-        <Text style={styles.termsText}>Syarat dan ketentuan berlaku</Text>
+        {/* PERUBAHAN: Teks sekarang dibungkus dengan TouchableOpacity */}
+        <TouchableOpacity onPress={() => navigation.navigate('InfoScreen', { title: 'Ketentuan & Privasi', content: ketentuanContent })}>
+            <Text style={styles.termsText}>Syarat dan ketentuan berlaku</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -149,6 +165,7 @@ const styles = StyleSheet.create({
     color: '#28A745',
     fontSize: 12,
     fontFamily: 'Poppins-Regular',
+    textDecorationLine: 'underline', // Menambahkan garis bawah agar terlihat seperti link
   },
 });
 
